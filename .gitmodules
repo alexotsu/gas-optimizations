@@ -2,3 +2,6 @@
 	path = lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
 	branch = v1.4.0
+[submodule "references/b3c3bc8df01afc2b649534da8007af88"]
+	path = references/b3c3bc8df01afc2b649534da8007af88
+	url = https://gist.github.com/b3c3bc8df01afc2b649534da8007af88.git
