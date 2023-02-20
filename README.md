@@ -8,8 +8,9 @@ Clone this repo and run `forge test --gas-report`
 | src/ZeroAddressGasComp.sol:ZeroAddressGasComp contract |                 |     |        |     |         |
 |--------------------------------------------------------|-----------------|-----|--------|-----|---------|
 | Function Name                                          | min             | avg | median | max | # calls |
-| AssemblyIsNotZeroAddress                               | 310             | 310 | 310    | 310 | 1       |
-| SolidityIsNotZeroAddress                               | 324             | 324 | 324    | 324 | 1       |
+| assembly_notZero                                       | 288             | 288 | 288    | 288 | 1       |
+| errorString_notZero                                    | 428             | 428 | 428    | 428 | 1       |
+| solidity_notZero                                       | 346             | 346 | 346    | 346 | 1       |
 
 ## [GAS-2] Using bools for storage incurs overhead
 ### Tests:

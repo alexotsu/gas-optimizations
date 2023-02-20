@@ -5,13 +5,13 @@ contract ZeroAddressGasComp {
 
     error ZeroAddress();
 
-    function SolidityIsNotZeroAddress(address toCheck) public pure returns(bool success) {
+    function solidity_notZero(address toCheck) public pure returns(bool success) {
         if(toCheck == address(0)) revert ZeroAddress();
 
         return true;
     }
 
-    function AssemblyIsNotZeroAddress(address toCheck) public pure returns(bool success) {
+    function assembly_notZero(address toCheck) public pure returns(bool success) {
         assembly {
             if iszero(toCheck) {
                 let ptr := mload(0x40)
@@ -19,6 +19,12 @@ contract ZeroAddressGasComp {
                 revert(ptr, 0x4)
             }
         }
+
+        return true;
+    }
+
+    function errorString_notZero(address toCheck) public pure returns(bool success) {
+        require(toCheck != address(0), "Zero Address");
 
         return true;
     }

@@ -13,9 +13,12 @@ contract GasPoCTest is Test {
 
     function testCheckZero() public {
         vm.expectRevert(bytes4(0xd92e233d));
-        zeroAddressGasComp.SolidityIsNotZeroAddress(address(0));
+        zeroAddressGasComp.solidity_notZero(address(0));
+
+        vm.expectRevert();
+        zeroAddressGasComp.errorString_notZero(address(0));
 
         vm.expectRevert(bytes4(0xd92e233d));
-        zeroAddressGasComp.AssemblyIsNotZeroAddress(address(0));
+        zeroAddressGasComp.assembly_notZero(address(0));
     }
 }
