@@ -54,3 +54,23 @@ Couple of interesting takeaways from this one:
 Caching the array length requires creating a new variable in memory, which costs gas. So for small arrays in memory, it appears to be more gas-efficient to just make repeated calls to the `length` property of the array (see the _min_ column of `memory_noCache` vs the _min_ column of `memory_cachedOutsideLoop`). For larger arrays (see _max_ column of both `memory_noCache` and `memory_cachedOutsideLoop`) and for arrays of basically all sizes in storage (see both function names that start with `storage`), it is better practice to cache the array length outside the loop.
 
 Note that the effect is the opposite when the array is stored in `calldata` - re-reading the array's length is slightly cheaper because you do not need to expand memory to make a variable that caches the length.
+
+## [GAS-4] State variables should be cached in stack variables rather than re-reading them from storage
+Wherein the state variable is accessed twice in the same function call:
+
+| src/StateVariablesInStack.sol:StateVariables contract |                 |      |        |      |         |
+|-------------------------------------------------------|-----------------|------|--------|------|---------|
+| Function Name                                         | min             | avg  | median | max  | # calls |
+| cache_stateVar                                        | 764             | 764  | 764    | 764  | 1       |
+| noCache_stateVar                                      | 2909            | 2909 | 2909   | 2909 | 1       |
+
+## [GAS-5] Use calldata instead of memory for function arguments that do not get mutated
+
+## [GAS-6] Don't initialize variables with default value
+Saves 22 gas per uninitialized variable.
+
+| src/NoDefaultValue.sol:NoDefaultValue contract |                 |      |        |      |         |
+|------------------------------------------------|-----------------|------|--------|------|---------|
+| Function Name                                  | min             | avg  | median | max  | # calls |
+| withDefault                                    | 1427            | 1427 | 1427   | 1427 | 1       |
+| withoutDefault                                 | 1449            | 1449 | 1449   | 1449 | 1       |
