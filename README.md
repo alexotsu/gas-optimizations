@@ -1,10 +1,13 @@
 # Introduction
+
 Upon reading a report on known [gas optimizations for an audit](https://gist.github.com/Picodes/b3c3bc8df01afc2b649534da8007af88), I realized there were no demonstrations of the optimizations themselves. This document is proof-of-concept code implementing the recommendations and showing the gas comparisons.
 
-# Reproducing
+## Reproducing
+
 Clone this repo and run `forge test --gas-report`
 
 ## [GAS-1] Use assembly to check for `address(0)`
+
 | src/ZeroAddressGasComp.sol:ZeroAddressGasComp contract |                 |     |        |     |         |
 |--------------------------------------------------------|-----------------|-----|--------|-----|---------|
 | Function Name                                          | min             | avg | median | max | # calls |
@@ -13,14 +16,18 @@ Clone this repo and run `forge test --gas-report`
 | solidity_notZero                                       | 346             | 346 | 346    | 346 | 1       |
 
 ## [GAS-2] Using bools for storage incurs overhead
-### Tests:
+
+### Tests
+
 #### Storing a Boolean
+
 1. Flipping a `mapping(address => bool)` slot from `false` to `true`
 2. Reading that mapping slot
 3. Flipping it back to `false`
 4. Flipping it back to `true`
 
 #### Storing a Uint
+
 1. Flipping a `mapping(address => uint)` slot from `0` to `2`
 2. Reading that mapping slot
 3. Flipping it from `2` to `1` (where DApps reading it would have to know that both `0` and `1` was false, and `2` is true)
@@ -37,11 +44,12 @@ Clone this repo and run `forge test --gas-report`
 | storeUint                                              | 514             | 11514 | 11514  | 22514 | 2       |
 
 Couple of interesting takeaways from this one:
+
 1. Across the board, it is cheaper to read a uint value than a bool.
 2. Using a non-zero value for both false (i.e. `1`) **and** true (`2`) saves gas on all subsequent flip-flops from false to true. It is more expensive initially to change the default `0` value to a non-zero (see the _max_ column for `storeUint`), but ~20x cheaper to change a non-zero value to another non-zero after setting it initially (see _min_ column for `storeUint`).
 
-
 ## [GAS-3] Cache array length outside of loop
+
 | src/CacheArrayLength.sol:CacheArrayLength contract |                 |         |         |          |         |
 |----------------------------------------------------|-----------------|---------|---------|----------|---------|
 | Function Name                                      | min             | avg     | median  | max      | # calls |
@@ -56,6 +64,7 @@ Caching the array length requires creating a new variable in memory, which costs
 Note that the effect is the opposite when the array is stored in `calldata` - re-reading the array's length is slightly cheaper because you do not need to expand memory to make a variable that caches the length.
 
 ## [GAS-4] State variables should be cached in stack variables rather than re-reading them from storage
+
 Wherein the state variable is accessed twice in the same function call:
 
 | src/StateVariablesInStack.sol:StateVariables contract |                 |      |        |      |         |
@@ -67,6 +76,7 @@ Wherein the state variable is accessed twice in the same function call:
 ## [GAS-5] Use calldata instead of memory for function arguments that do not get mutated
 
 ## [GAS-6] Don't initialize variables with default value
+
 Saves 22 gas per uninitialized variable.
 
 | src/NoDefaultValue.sol:NoDefaultValue contract |                 |      |        |      |         |
