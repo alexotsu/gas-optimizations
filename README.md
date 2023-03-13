@@ -74,3 +74,13 @@ Saves 22 gas per uninitialized variable.
 | Function Name                                  | min             | avg  | median | max  | # calls |
 | withDefault                                    | 1427            | 1427 | 1427   | 1427 | 1       |
 | withoutDefault                                 | 1449            | 1449 | 1449   | 1449 | 1       |
+
+## [GAS-7] Functions guaranteed to revert when called by normal users can be marked payable
+
+| src/PayableProtectedFunction.sol:PayableProtectedFunction contract |                 |      |        |      |         |
+|--------------------------------------------------------------------|-----------------|------|--------|------|---------|
+| Deployment Cost                                                    | Deployment Size |      |        |      |         |
+| 155518                                                             | 784             |      |        |      |         |
+| Function Name                                                      | min             | avg  | median | max  | # calls |
+| nonPayableFunc                                                     | 2371            | 2391 | 2391   | 2412 | 2       |
+| payableFunc                                                        | 325             | 1345 | 1345   | 2366 | 2       |
