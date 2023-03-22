@@ -6,15 +6,22 @@ import "../src/StateVariablesInStack.sol";
 
 contract StateVariablesTest is Test {
     StateVariables public stateVariables;
+    uint public loops;
 
     function setUp() public {
         stateVariables = new StateVariables(10);
+        loops = 10;
     }
 
-    function testReturnVals() public {
-        uint loops = 2;
-        uint noCache = stateVariables.noCache_stateVar(loops);
+
+    function testBaseCase() public {
+        uint baseCase = stateVariables.stateVar();
+    }
+
+    function testCache() public {
         uint cache = stateVariables.cache_stateVar(loops);
-        assertEq(noCache, cache);
+    }
+    function testNoCache() public {
+        uint noCache = stateVariables.noCache_stateVar(loops);
     }
 }

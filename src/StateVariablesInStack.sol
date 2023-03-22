@@ -2,20 +2,20 @@
 pragma solidity ^0.8.13;
 
 contract StateVariables {
-    uint public v;
+    uint public stateVar;
 
     constructor(uint _v) {
-        v = _v;
+        stateVar = _v;
     }
 
     function noCache_stateVar(uint loops) public view returns(uint mutatedVal) {
         for(uint i = 0; i < loops; ++i) {
-            mutatedVal += v;
+            mutatedVal += stateVar;
         }
     }
 
     function cache_stateVar(uint loops) public view returns(uint mutatedVal) {
-        uint cachedVar = v;
+        uint cachedVar = stateVar;
         for(uint i = 0; i < loops; ++i) {
             mutatedVal += cachedVar;
         }
